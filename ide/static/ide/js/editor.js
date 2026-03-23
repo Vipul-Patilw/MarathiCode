@@ -35,62 +35,84 @@ const ICONS = {
   default: `<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
 };
 
-// ── DOM ───────────────────────────────────────────
 const $ = id => document.getElementById(id);
-const editor         = $('codeEditor');
-const gutter         = $('gutter');
-const runBtn         = $('runBtn');
-const outputBody     = $('outputBody');
-const statusDot      = $('statusDot');
-const statusText     = $('statusText');
-const cursorPos      = $('cursorPos');
-const lineCountEl    = $('lineCount');
-const loadingOvl     = $('loadingOverlay');
-const inlineRow      = $('inlineInputRow');
-const inlineBox      = $('inlineInputBox');
-const inlineSend     = $('inlineInputSend');
-const inlinePromptEl = $('inlineInputPrompt');
-const examplesGrid   = $('examplesGrid');
-const sbErrors       = $('sbErrors');
-const highlightLayer = $('highlightLayer');
-const codeWrap       = $('codeWrap');
+
+// ── DOM ───────────────────────────────────────────
+const editor          = $('codeEditor');
+const gutter          = $('gutter');
+const runBtn          = $('runBtn');
+const runBtnMobile    = $('runBtnMobile');
+const outputBody      = $('outputBody');
+const statusDot       = $('statusDot');
+const statusText      = $('statusText');
+const cursorPos       = $('cursorPos');
+const lineCountEl     = $('lineCount');
+const loadingOvl      = $('loadingOverlay');
+const inlineRow       = $('inlineInputRow');
+const inlineBox       = $('inlineInputBox');
+const inlineSend      = $('inlineInputSend');
+const inlinePromptEl  = $('inlineInputPrompt');
+const examplesGrid    = $('examplesGrid');
+const sbErrors        = $('sbErrors');
+const highlightLayer  = $('highlightLayer');
+const sidePanel       = $('sidePanel');
+const sidebarOverlay  = $('sidebarOverlay');
 
 let fontSize = 13;
 
 // ═══════════════════════════════════════════════════
-//  CUSTOM MODAL SYSTEM (replaces alert / confirm / prompt)
+//  MOBILE SIDEBAR DRAWER
 // ═══════════════════════════════════════════════════
+function openSidebar() {
+  sidePanel.classList.add('mobile-open');
+  sidebarOverlay.classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+function closeSidebar() {
+  sidePanel.classList.remove('mobile-open');
+  sidebarOverlay.classList.remove('visible');
+  document.body.style.overflow = '';
+}
 
-const modalOverlay = $('mcModalOverlay');
-const modalEl      = $('mcModal');
-const modalIcon    = $('mcModalIcon');
-const modalTitle   = $('mcModalTitle');
-const modalMsg     = $('mcModalMessage');
-const modalFooter  = $('mcModalFooter');
+$('mobileMenuBtn').addEventListener('click', openSidebar);
+$('mobileMenuBtn2').addEventListener('click', openSidebar);
+sidebarOverlay.addEventListener('click', closeSidebar);
+
+// Close sidebar when an example is tapped (mobile UX)
+document.addEventListener('click', e => {
+  if (e.target.closest('.ex-item') || e.target.closest('.file-item')) {
+    if (window.innerWidth <= 680) closeSidebar();
+  }
+});
+
+// ═══════════════════════════════════════════════════
+//  CUSTOM MODAL SYSTEM
+// ═══════════════════════════════════════════════════
+const modalOverlay   = $('mcModalOverlay');
+const modalEl        = $('mcModal');
+const modalIcon      = $('mcModalIcon');
+const modalTitle     = $('mcModalTitle');
+const modalMsg       = $('mcModalMessage');
+const modalFooter    = $('mcModalFooter');
 const modalInputWrap = $('mcModalInputWrap');
-const modalInput   = $('mcModalInput');
+const modalInput     = $('mcModalInput');
 
-// SVG icons for each modal type
 const MODAL_ICONS = {
-  alert: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,
+  alert:   `<svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,
   confirm: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  prompt: `<svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,
-  error: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M15 9l-6 6M9 9l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+  prompt:  `<svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,
+  error:   `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M15 9l-6 6M9 9l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
 };
+
+let _modalKeyHandler = null, _backdropHandler = null;
 
 function _openModal(type, title, message, hasInput, defaultVal) {
   return new Promise(resolve => {
-    // Set type class on modal
     modalEl.className = `mc-modal mc-modal--${type}`;
-
-    // Icon
     modalIcon.innerHTML = MODAL_ICONS[type] || MODAL_ICONS.alert;
-
-    // Title & message
     modalTitle.textContent = title;
     modalMsg.textContent   = message;
 
-    // Input field
     if (hasInput) {
       modalInputWrap.style.display = '';
       modalInput.value = defaultVal || '';
@@ -99,51 +121,44 @@ function _openModal(type, title, message, hasInput, defaultVal) {
       modalInputWrap.style.display = 'none';
     }
 
-    // Buttons
     modalFooter.innerHTML = '';
 
+    const done = val => { _closeModal(); resolve(val); };
+
     if (type === 'confirm') {
-      const cancelBtn = _makeBtn('mc-btn mc-btn-cancel', 'रद्द करा');
-      const okBtn     = _makeBtn('mc-btn mc-btn-ok-confirm', 'होय');
-      cancelBtn.addEventListener('click', () => { _closeModal(); resolve(false); });
-      okBtn.addEventListener('click',     () => { _closeModal(); resolve(true); });
-      modalFooter.appendChild(cancelBtn);
-      modalFooter.appendChild(okBtn);
-      // Keyboard: Escape = cancel, Enter = confirm
+      const cancel = _mkBtn('mc-btn mc-btn-cancel', 'रद्द करा');
+      const ok     = _mkBtn('mc-btn mc-btn-ok-confirm', 'होय');
+      cancel.onclick = () => done(false);
+      ok.onclick     = () => done(true);
+      modalFooter.append(cancel, ok);
       _modalKeyHandler = e => {
-        if (e.key === 'Escape') { _closeModal(); resolve(false); }
-        if (e.key === 'Enter' && !hasInput) { _closeModal(); resolve(true); }
+        if (e.key === 'Escape') done(false);
+        if (e.key === 'Enter' && !hasInput) done(true);
       };
     } else if (type === 'prompt') {
-      const cancelBtn = _makeBtn('mc-btn mc-btn-cancel', 'रद्द करा');
-      const okBtn     = _makeBtn('mc-btn mc-btn-ok-prompt', 'ठीक आहे');
-      cancelBtn.addEventListener('click', () => { _closeModal(); resolve(null); });
-      okBtn.addEventListener('click',     () => { _closeModal(); resolve(modalInput.value); });
+      const cancel = _mkBtn('mc-btn mc-btn-cancel', 'रद्द करा');
+      const ok     = _mkBtn('mc-btn mc-btn-ok-prompt', 'ठीक आहे');
+      cancel.onclick = () => done(null);
+      ok.onclick     = () => done(modalInput.value);
       modalInput.addEventListener('keydown', e => {
-        if (e.key === 'Enter') { e.preventDefault(); _closeModal(); resolve(modalInput.value); }
-        if (e.key === 'Escape') { e.preventDefault(); _closeModal(); resolve(null); }
+        if (e.key === 'Enter')  { e.preventDefault(); done(modalInput.value); }
+        if (e.key === 'Escape') { e.preventDefault(); done(null); }
       });
-      modalFooter.appendChild(cancelBtn);
-      modalFooter.appendChild(okBtn);
-      _modalKeyHandler = e => {
-        if (e.key === 'Escape') { _closeModal(); resolve(null); }
-      };
+      modalFooter.append(cancel, ok);
+      _modalKeyHandler = e => { if (e.key === 'Escape') done(null); };
     } else {
-      // alert / error — single OK button
-      const btnCls = type === 'error' ? 'mc-btn mc-btn-ok-alert' : 'mc-btn mc-btn-ok-alert';
-      const okBtn = _makeBtn(btnCls, 'ठीक आहे');
-      okBtn.style.background = type === 'error' ? 'var(--c-red)' : '';
-      okBtn.addEventListener('click', () => { _closeModal(); resolve(undefined); });
-      modalFooter.appendChild(okBtn);
+      const btnCls = type === 'error' ? 'mc-btn mc-btn-ok-error' : 'mc-btn mc-btn-ok-alert';
+      const ok = _mkBtn(btnCls, 'ठीक आहे');
+      ok.onclick = () => done(undefined);
+      modalFooter.append(ok);
       _modalKeyHandler = e => {
-        if (e.key === 'Enter' || e.key === 'Escape') { _closeModal(); resolve(undefined); }
+        if (e.key === 'Enter' || e.key === 'Escape') done(undefined);
       };
-      setTimeout(() => okBtn.focus(), 80);
+      setTimeout(() => ok.focus(), 80);
     }
 
-    // Backdrop click closes (for alert only, not confirm/prompt)
     if (type === 'alert' || type === 'error') {
-      _backdropHandler = e => { if (e.target === modalOverlay) { _closeModal(); resolve(undefined); } };
+      _backdropHandler = e => { if (e.target === modalOverlay) done(undefined); };
       modalOverlay.addEventListener('click', _backdropHandler);
     }
 
@@ -152,128 +167,95 @@ function _openModal(type, title, message, hasInput, defaultVal) {
   });
 }
 
-let _modalKeyHandler  = null;
-let _backdropHandler  = null;
-
 function _closeModal() {
   modalOverlay.classList.remove('open');
   if (_modalKeyHandler) { document.removeEventListener('keydown', _modalKeyHandler); _modalKeyHandler = null; }
   if (_backdropHandler) { modalOverlay.removeEventListener('click', _backdropHandler); _backdropHandler = null; }
 }
 
-function _makeBtn(cls, label) {
+function _mkBtn(cls, label) {
   const b = document.createElement('button');
-  b.className = cls; b.textContent = label;
-  return b;
+  b.className = cls; b.textContent = label; return b;
 }
 
-// Public API — drop-in replacements
-function mcAlert(message, title = 'सूचना') {
-  return _openModal('alert', title, message, false);
-}
-function mcConfirm(message, title = 'खात्री करा') {
-  return _openModal('confirm', title, message, false);
-}
-function mcPrompt(message, defaultVal = '', title = 'माहिती द्या') {
-  return _openModal('prompt', title, message, true, defaultVal);
-}
-function mcError(message, title = 'चूक') {
-  return _openModal('error', title, message, false);
-}
+const mcAlert   = (msg, title = 'सूचना')       => _openModal('alert',   title, msg, false);
+const mcConfirm = (msg, title = 'खात्री करा')  => _openModal('confirm', title, msg, false);
+const mcPrompt  = (msg, def = '', title = 'माहिती द्या') => _openModal('prompt', title, msg, true, def);
+const mcError   = (msg, title = 'चूक')         => _openModal('error',   title, msg, false);
 
 // ═══════════════════════════════════════════════════
 //  SYNTAX HIGHLIGHTING
+//  ─ Textarea manages its own scroll (overflow:auto)
+//  ─ On textarea scroll, we copy scrollTop/Left to
+//    the highlight <pre> — so tokens always align.
+//  ─ Because the textarea is NOT position:absolute
+//    the browser positions the caret correctly.
 // ═══════════════════════════════════════════════════
-
-// Token definitions — order matters: longer/more-specific first
-const KW_FLOW    = ['nahitar jar','jaoparyant','pratyek','nahitar','thamba','pudhe','jaude','madhe','jar'];
-const KW_FN      = ['karya','parat','varg','suruvat'];
-const KW_BOOL    = ['khare','khote','shunya','aani','kiva','nahi'];
-const KW_SELF    = ['swatah'];
-const BUILTINS   = ['poornanank','dasamank','akshar','lambai','aakda_shreni','dakhava','ghya'];
-
-// Build a regex that matches any of the keywords as whole words
-function _kwRe(list) {
-  return new RegExp(`\\b(${list.map(k => k.replace(/ /g,'\\s+')).join('|')})\\b`, 'g');
-}
+const KW_FLOW  = ['nahitar jar','jaoparyant','pratyek','nahitar','thamba','pudhe','jaude','madhe','jar'];
+const KW_FN    = ['karya','parat','varg','suruvat'];
+const KW_BOOL  = ['khare','khote','shunya','aani','kiva','nahi'];
+const KW_SELF  = ['swatah'];
+const BUILTINS = ['poornanank','dasamank','akshar','lambai','aakda_shreni','dakhava','ghya'];
 
 function escHtml(s) {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function highlightLine(raw) {
-  let i = 0;
-  let out = '';
+  let i = 0, out = '';
   const len = raw.length;
-
   while (i < len) {
     const ch = raw[i];
 
-    // ── Comment: # ... rest of line ───────────────
-    if (ch === '#') {
-      out += `<span class="hl-cmt">${escHtml(raw.slice(i))}</span>`;
-      return out;
-    }
+    // Comment
+    if (ch === '#') { out += `<span class="hl-cmt">${escHtml(raw.slice(i))}</span>`; return out; }
 
-    // ── String: "..." or '...' ────────────────────
+    // String
     if (ch === '"' || ch === "'") {
-      const q = ch;
-      let j = i + 1;
+      const q = ch; let j = i + 1;
       while (j < len) {
         if (raw[j] === '\\') { j += 2; continue; }
         if (raw[j] === q)    { j++; break; }
         j++;
       }
       out += `<span class="hl-str">${escHtml(raw.slice(i, j))}</span>`;
-      i = j;
-      continue;
+      i = j; continue;
     }
 
-    // ── Number ────────────────────────────────────
-    if (/\d/.test(ch) && (i === 0 || /[^a-zA-Z0-9_\u0900-\u097F]/.test(raw[i - 1]))) {
+    // Number
+    if (/\d/.test(ch) && (i === 0 || /[^a-zA-Z0-9_\u0900-\u097F]/.test(raw[i-1]))) {
       let j = i;
       while (j < len && /[\d._]/.test(raw[j])) j++;
-      // only if not followed by identifier char
       if (j === len || /[^a-zA-Z_\u0900-\u097F]/.test(raw[j])) {
         out += `<span class="hl-num">${escHtml(raw.slice(i, j))}</span>`;
         i = j; continue;
       }
     }
 
-    // ── Identifier / keyword ──────────────────────
+    // Identifier / keyword
     if (/[a-zA-Z_\u0900-\u097F]/.test(ch)) {
       let j = i;
       while (j < len && /[a-zA-Z0-9_\u0900-\u097F]/.test(raw[j])) j++;
       const word = raw.slice(i, j);
 
-      // Check multi-word "nahitar jar" lookahead
+      // "nahitar jar" two-word keyword
       if (word === 'nahitar') {
-        const rest = raw.slice(j);
-        const m = rest.match(/^(\s+jar)\b/);
-        if (m) {
-          out += `<span class="hl-kw">${escHtml(word + m[1])}</span>`;
-          i = j + m[1].length; continue;
-        }
+        const m = raw.slice(j).match(/^(\s+jar)\b/);
+        if (m) { out += `<span class="hl-kw">${escHtml(word + m[1])}</span>`; i = j + m[1].length; continue; }
       }
 
       const cls = _wordClass(word);
       if (cls) {
         out += `<span class="${cls}">${escHtml(word)}</span>`;
+      } else if (/^[A-Z][a-zA-Z0-9_]+$/.test(word)) {
+        out += `<span class="hl-class">${escHtml(word)}</span>`;
       } else {
-        // Check if it looks like a class name (CamelCase)
-        if (/^[A-Z][a-zA-Z0-9_]+$/.test(word)) {
-          out += `<span class="hl-class">${escHtml(word)}</span>`;
-        } else {
-          out += escHtml(word);
-        }
+        out += escHtml(word);
       }
       i = j; continue;
     }
 
-    // ── Operators ─────────────────────────────────
+    // Operators
     if (/[+\-*\/%=<>!&|^~]/.test(ch)) {
       let j = i;
       while (j < len && /[+\-*\/%=<>!&|^~]/.test(raw[j])) j++;
@@ -281,38 +263,39 @@ function highlightLine(raw) {
       i = j; continue;
     }
 
-    // ── Brackets / punctuation ────────────────────
+    // Brackets / punctuation
     if (/[()[\]{},.:;@]/.test(ch)) {
       out += `<span class="hl-paren">${escHtml(ch)}</span>`;
       i++; continue;
     }
 
-    // Fallthrough
-    out += escHtml(ch);
-    i++;
+    out += escHtml(ch); i++;
   }
   return out;
 }
 
-function _wordClass(word) {
-  if (KW_FLOW.includes(word))  return 'hl-kw';
-  if (KW_FN.includes(word))    return 'hl-fn';
-  if (KW_BOOL.includes(word))  return 'hl-bool';
-  if (KW_SELF.includes(word))  return 'hl-self';
-  if (BUILTINS.includes(word)) return 'hl-builtin';
+function _wordClass(w) {
+  if (KW_FLOW.includes(w))  return 'hl-kw';
+  if (KW_FN.includes(w))    return 'hl-fn';
+  if (KW_BOOL.includes(w))  return 'hl-bool';
+  if (KW_SELF.includes(w))  return 'hl-self';
+  if (BUILTINS.includes(w)) return 'hl-builtin';
   return null;
 }
 
-function buildHighlight(code) {
-  return code.split('\n').map(highlightLine).join('\n');
+function updateHighlight() {
+  highlightLayer.innerHTML = editor.value.split('\n').map(highlightLine).join('\n') + '\n';
+  // After updating content, re-sync scroll offset
+  _syncHighlightScroll();
 }
 
-function updateHighlight() {
-  // Keep a trailing newline so the last line always has correct height
-  highlightLayer.innerHTML = buildHighlight(editor.value) + '\n';
-  // Sync scroll offset
-  highlightLayer.style.transform =
-    `translate(-${codeWrap.scrollLeft}px, -${codeWrap.scrollTop}px)`;
+function _syncHighlightScroll() {
+  // Copy textarea's scroll position to the highlight pre.
+  // This is the KEY fix: the textarea scrolls itself, we mirror it.
+  highlightLayer.scrollTop  = editor.scrollTop;
+  highlightLayer.scrollLeft = editor.scrollLeft;
+  // Sync gutter too
+  gutter.scrollTop = editor.scrollTop;
 }
 
 // ── GUTTER + CURSOR ───────────────────────────────
@@ -323,12 +306,11 @@ function updateGutter() {
 }
 function updateCursor() {
   const lines = editor.value.slice(0, editor.selectionStart).split('\n');
-  cursorPos.textContent = `ओळ ${lines.length}, स्तंभ ${lines[lines.length - 1].length + 1}`;
+  cursorPos.textContent = `ओळ ${lines.length}, स्तंभ ${lines[lines.length-1].length + 1}`;
 }
-function syncScroll() {
-  gutter.scrollTop = codeWrap.scrollTop;
-  updateHighlight();
-}
+
+// Textarea's own scroll event → sync highlight + gutter
+editor.addEventListener('scroll', _syncHighlightScroll);
 
 editor.addEventListener('input', () => {
   updateGutter();
@@ -337,7 +319,6 @@ editor.addEventListener('input', () => {
 });
 editor.addEventListener('click',  updateCursor);
 editor.addEventListener('keyup',  updateCursor);
-codeWrap.addEventListener('scroll', syncScroll);
 
 editor.addEventListener('keydown', e => {
   if (e.key === 'Tab') {
@@ -360,12 +341,16 @@ editor.addEventListener('keydown', e => {
   }
 });
 
-// ── FONT SIZE (keep highlight layer in sync) ──────
+// ── FONT SIZE ─────────────────────────────────────
 function applyFontSize(px) {
   editor.style.fontSize         = px + 'px';
   highlightLayer.style.fontSize = px + 'px';
   gutter.style.fontSize         = px + 'px';
-  $('fsValue').textContent      = px + 'px';
+  $('fsValue').textContent       = px + 'px';
+  // Recalculate gutter line-height match
+  editor.style.lineHeight         = '1.72';
+  highlightLayer.style.lineHeight = '1.72';
+  gutter.style.lineHeight         = '1.72';
 }
 
 // ── OUTPUT HELPERS ────────────────────────────────
@@ -390,7 +375,6 @@ function setStatus(state, msg) {
 
 // ── INLINE INPUT ──────────────────────────────────
 let _code = '', _collected = [], _remaining = [];
-
 function showInlineInput(prompt) {
   inlinePromptEl.textContent = prompt || '> ';
   inlineBox.value = '';
@@ -398,31 +382,24 @@ function showInlineInput(prompt) {
   inlineBox.focus();
 }
 function hideInlineInput() { inlineRow.style.display = 'none'; inlineBox.value = ''; }
-
 function submitInput() {
-  const val = inlineBox.value;
-  hideInlineInput();
+  const val = inlineBox.value; hideInlineInput();
   addLine((inlinePromptEl.textContent || '> ') + val, 'echo');
   _collected.push(val);
-  if (_remaining.length > 0) {
-    showInlineInput(_remaining.shift());
-  } else {
-    executeCode(_code, _collected);
-  }
+  if (_remaining.length > 0) showInlineInput(_remaining.shift());
+  else executeCode(_code, _collected);
 }
 inlineSend.addEventListener('click', submitInput);
 inlineBox.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submitInput(); } });
 
 // ── RUN FLOW ──────────────────────────────────────
-runBtn.addEventListener('click', startRun);
-
 function startRun() {
   const code = editor.value.trim();
   if (!code) { clearOutput(); addLine('कोड लिहा आणि मग चालवा!', 'err'); return; }
   _code = code; _collected = []; _remaining = [];
   clearOutput();
   setStatus('running', 'चालवत आहे…');
-  runBtn.disabled = true;
+  [runBtn, runBtnMobile].forEach(b => { if(b) b.disabled = true; });
 
   fetch('/run/', {
     method: 'POST',
@@ -431,7 +408,7 @@ function startRun() {
   })
     .then(r => r.json())
     .then(data => {
-      runBtn.disabled = false;
+      [runBtn, runBtnMobile].forEach(b => { if(b) b.disabled = false; });
       if (data.needs_input && data.input_prompts?.length) {
         setStatus('', 'Input अपेक्षित…');
         _remaining = [...data.input_prompts];
@@ -441,7 +418,7 @@ function startRun() {
       }
     })
     .catch(err => {
-      runBtn.disabled = false;
+      [runBtn, runBtnMobile].forEach(b => { if(b) b.disabled = false; });
       addLine('सर्व्हर चूक: ' + err.message, 'err');
       setStatus('error', 'चूक');
     });
@@ -449,12 +426,11 @@ function startRun() {
 
 async function executeCode(code, inputs) {
   loadingOvl.classList.add('visible');
-  runBtn.disabled = true;
+  [runBtn, runBtnMobile].forEach(b => { if(b) b.disabled = true; });
   setStatus('running', 'चालवत आहे…');
   try {
     const r = await fetch('/run/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code, inputs })
     });
     displayResult(await r.json());
@@ -463,7 +439,7 @@ async function executeCode(code, inputs) {
     setStatus('error', 'चूक');
   } finally {
     loadingOvl.classList.remove('visible');
-    runBtn.disabled = false;
+    [runBtn, runBtnMobile].forEach(b => { if(b) b.disabled = false; });
   }
 }
 
@@ -473,7 +449,6 @@ function displayResult(data) {
   }
   if (data.error) {
     addLine('चूक: ' + data.error, 'err');
-    sbErrors.childNodes[1] && (sbErrors.childNodes[1].textContent = ' 1');
     setStatus('error', 'चूक');
   }
   if (data.success && !data.error) {
@@ -484,6 +459,10 @@ function displayResult(data) {
     setStatus('error', 'चूक');
   }
 }
+
+// Wire run buttons
+if (runBtn)       runBtn.addEventListener('click', startRun);
+if (runBtnMobile) runBtnMobile.addEventListener('click', startRun);
 
 // ── ACTIVITY BAR / PANELS ─────────────────────────
 document.querySelectorAll('.act-btn').forEach(btn => {
@@ -532,24 +511,34 @@ $('themeToggleBtn').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';
   applyTheme(cur === 'light' ? 'dark' : 'light');
 });
+// Mobile theme button cycles: dark→light→saffron→midnight→dark
+const THEME_CYCLE = ['dark','light','saffron','midnight'];
+$('themeMobileBtn').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = THEME_CYCLE[(THEME_CYCLE.indexOf(cur) + 1) % THEME_CYCLE.length];
+  applyTheme(next);
+});
 const savedTheme = localStorage.getItem('mc-theme');
 if (savedTheme) applyTheme(savedTheme);
 
+// Settings button opens settings panel
+$('settingsBtn').addEventListener('click', () => {
+  document.querySelectorAll('.act-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel-view').forEach(p => p.classList.remove('active'));
+  $('panel-settings-panel').classList.add('active');
+  if (window.innerWidth <= 680) openSidebar();
+});
+
 // ── FONT SIZE ─────────────────────────────────────
-$('fsMinus').addEventListener('click', () => {
-  if (fontSize > 10) { fontSize--; applyFontSize(fontSize); updateGutter(); }
-});
-$('fsPlus').addEventListener('click', () => {
-  if (fontSize < 20) { fontSize++; applyFontSize(fontSize); updateGutter(); }
-});
+$('fsMinus').addEventListener('click', () => { if (fontSize > 10) { fontSize--; applyFontSize(fontSize); updateGutter(); } });
+$('fsPlus').addEventListener('click',  () => { if (fontSize < 20) { fontSize++; applyFontSize(fontSize); updateGutter(); } });
 
 // ── RESIZE PANELS ─────────────────────────────────
 const outputDrag = $('outputDrag');
 const outputPane = document.querySelector('.output-pane');
 let dragStartY = 0, dragStartH = 0;
 outputDrag.addEventListener('mousedown', e => {
-  dragStartY = e.clientY;
-  dragStartH = outputPane.offsetHeight;
+  dragStartY = e.clientY; dragStartH = outputPane.offsetHeight;
   outputDrag.classList.add('dragging');
   document.addEventListener('mousemove', onOutputDrag);
   document.addEventListener('mouseup', () => {
@@ -557,14 +546,27 @@ outputDrag.addEventListener('mousedown', e => {
     document.removeEventListener('mousemove', onOutputDrag);
   }, { once: true });
 });
+// Touch drag for output pane
+outputDrag.addEventListener('touchstart', e => {
+  dragStartY = e.touches[0].clientY; dragStartH = outputPane.offsetHeight;
+  outputDrag.classList.add('dragging');
+  document.addEventListener('touchmove', onOutputDragTouch, { passive: false });
+  document.addEventListener('touchend', () => {
+    outputDrag.classList.remove('dragging');
+    document.removeEventListener('touchmove', onOutputDragTouch);
+  }, { once: true });
+}, { passive: true });
 function onOutputDrag(e) {
-  const delta = dragStartY - e.clientY;
-  const newH = Math.max(60, Math.min(window.innerHeight * .7, dragStartH + delta));
+  const newH = Math.max(44, Math.min(window.innerHeight * .7, dragStartH + (dragStartY - e.clientY)));
+  outputPane.style.height = newH + 'px';
+}
+function onOutputDragTouch(e) {
+  e.preventDefault();
+  const newH = Math.max(44, Math.min(window.innerHeight * .7, dragStartH + (dragStartY - e.touches[0].clientY)));
   outputPane.style.height = newH + 'px';
 }
 
 const resizeHandle = $('resizeHandle');
-const sidePanel = document.querySelector('.side-panel');
 let rpStartX = 0, rpStartW = 0;
 resizeHandle.addEventListener('mousedown', e => {
   rpStartX = e.clientX; rpStartW = sidePanel.offsetWidth;
@@ -587,41 +589,32 @@ $('clearBtn').addEventListener('click', async () => {
   editor.value = ''; updateGutter(); updateHighlight(); showWelcome();
   setStatus('', 'तयार');
 });
-
 $('copyBtn').addEventListener('click', () => {
   navigator.clipboard.writeText(editor.value).then(() => {
-    setStatus('success', 'कॉपी केले!');
-    setTimeout(() => setStatus('', 'तयार'), 2000);
+    setStatus('success', 'कॉपी केले!'); setTimeout(() => setStatus('', 'तयार'), 2000);
   });
 });
-
 $('formatBtn').addEventListener('click', () => {
   editor.value = editor.value.split('\n').map(l => l.replace(/\s+$/, '')).join('\n');
   updateGutter(); updateHighlight();
-  setStatus('success', 'फॉर्मॅट केले!');
-  setTimeout(() => setStatus('', 'तयार'), 2000);
+  setStatus('success', 'फॉर्मॅट केले!'); setTimeout(() => setStatus('', 'तयार'), 2000);
 });
-
-$('clearOutputBtn').addEventListener('click', () => {
-  hideInlineInput(); showWelcome(); setStatus('', 'तयार');
-});
-
+$('clearOutputBtn').addEventListener('click', () => { hideInlineInput(); showWelcome(); setStatus('', 'तयार'); });
+$('clearOutputMobileBtn').addEventListener('click', () => { hideInlineInput(); showWelcome(); setStatus('', 'तयार'); });
 $('copyOutputBtn').addEventListener('click', () => {
   const txt = [...outputBody.querySelectorAll('.output-line')].map(d => d.textContent).join('\n');
   navigator.clipboard.writeText(txt).then(() => {
-    setStatus('success', 'Output कॉपी केले!');
-    setTimeout(() => setStatus('', 'तयार'), 2000);
+    setStatus('success', 'Output कॉपी केले!'); setTimeout(() => setStatus('', 'तयार'), 2000);
   });
 });
 
 // Search
 $('searchBtn').addEventListener('click', () => {
   const q = $('searchInput').value; if (!q) return;
-  const code = editor.value;
-  const idx = code.indexOf(q);
+  const idx = editor.value.indexOf(q);
   if (idx === -1) { $('searchResults').textContent = 'सापडले नाही'; return; }
   editor.focus(); editor.setSelectionRange(idx, idx + q.length);
-  $('searchResults').textContent = `${(code.split(q).length - 1)} ठिकाणी सापडले`;
+  $('searchResults').textContent = `${(editor.value.split(q).length - 1)} ठिकाणी सापडले`;
 });
 $('replaceBtn').addEventListener('click', () => {
   const q = $('searchInput').value, r = $('replaceInput').value;
@@ -639,9 +632,7 @@ $('newFileBtn').addEventListener('click', async () => {
   if (!name) return;
   const fname = name.replace(/[^a-zA-Z0-9_]/g, '') || 'untitled';
   files[fname] = `# ${fname}.mc\n`;
-  addFileTab(fname);
-  addFileItem(fname);
-  switchFile(fname);
+  addFileTab(fname); addFileItem(fname); switchFile(fname);
 });
 
 function addFileTab(name) {
@@ -652,7 +643,6 @@ function addFileTab(name) {
   tab.addEventListener('click', e => { if (!e.target.closest('.tab-close')) switchFile(name); });
   tab.querySelector('.tab-close').addEventListener('click', e => { e.stopPropagation(); closeFile(name); });
 }
-
 function addFileItem(name) {
   const item = document.createElement('div');
   item.className = 'file-item'; item.dataset.file = name;
@@ -660,15 +650,14 @@ function addFileItem(name) {
   item.addEventListener('click', () => switchFile(name));
   $('fileList').appendChild(item);
 }
-
 function switchFile(name) {
   files[currentFile] = editor.value; currentFile = name;
-  editor.value = files[name] || ''; updateGutter(); updateHighlight();
+  editor.value = files[name] || '';
+  updateGutter(); updateHighlight();
   document.querySelectorAll('.editor-tab').forEach(t => t.classList.toggle('active', t.dataset.file === name));
   document.querySelectorAll('.file-item').forEach(t => t.classList.toggle('active', t.dataset.file === name));
   $('bcFile').textContent = name + '.mc';
 }
-
 function closeFile(name) {
   if (name === 'main') return;
   delete files[name];
@@ -715,4 +704,4 @@ EXAMPLES.forEach(ex => {
 // ── INIT ─────────────────────────────────────────
 updateGutter();
 updateCursor();
-updateHighlight(); // initial highlight pass
+updateHighlight();

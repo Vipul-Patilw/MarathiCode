@@ -2,7 +2,7 @@
 <html lang="mr" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>मराठीकोड IDE</title>
 {% load static %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,11 +11,13 @@
 </head>
 <body>
 
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║              TITLE BAR                  ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
+<!-- TITLE BAR -->
 <div class="titlebar">
   <div class="titlebar-left">
+    <!-- Mobile menu toggle (hidden on desktop) -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="मेनू उघडा">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
     <div class="app-logo">
       <svg class="logo-mark" viewBox="0 0 32 32" fill="none">
         <rect width="32" height="32" rx="7" fill="url(#lg)"/>
@@ -52,12 +54,13 @@
   </div>
 </div>
 
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║     ACTIVITY BAR + MAIN LAYOUT          ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
+<!-- Sidebar overlay (mobile tap-to-close) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- APP BODY -->
 <div class="app-body">
 
-  <!-- ACTIVITY BAR (left strip) -->
+  <!-- ACTIVITY BAR -->
   <nav class="activity-bar">
     <div class="activity-top">
       <button class="act-btn active" data-panel="explorer" title="फाईल्स">
@@ -74,7 +77,7 @@
       </button>
     </div>
     <div class="activity-bottom">
-      <button class="act-btn" data-panel="settings-panel" title="थीम / Settings">
+      <button class="act-btn" data-panel="settings-panel" title="Settings">
         <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.7"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
       </button>
     </div>
@@ -99,7 +102,7 @@
           <span class="file-lang-tag">MC</span>
         </div>
       </div>
-      <div class="panel-section-label" style="margin-top:16px;">साधने</div>
+      <div class="panel-section-label" style="margin-top:16px">साधने</div>
       <div class="tool-btns">
         <button class="tool-btn" id="clearBtn">
           <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -218,20 +221,16 @@
         <div class="docs-group-label">थीम</div>
         <div class="theme-grid">
           <button class="theme-tile active" data-theme="dark">
-            <div class="theme-preview tp-dark"></div>
-            <span>गडद</span>
+            <div class="theme-preview tp-dark"></div><span>गडद</span>
           </button>
           <button class="theme-tile" data-theme="light">
-            <div class="theme-preview tp-light"></div>
-            <span>उजळ</span>
+            <div class="theme-preview tp-light"></div><span>उजळ</span>
           </button>
           <button class="theme-tile" data-theme="saffron">
-            <div class="theme-preview tp-saffron"></div>
-            <span>केशरी</span>
+            <div class="theme-preview tp-saffron"></div><span>केशरी</span>
           </button>
           <button class="theme-tile" data-theme="midnight">
-            <div class="theme-preview tp-midnight"></div>
-            <span>Midnight</span>
+            <div class="theme-preview tp-midnight"></div><span>Midnight</span>
           </button>
         </div>
         <div class="docs-group-label" style="margin-top:20px">Font Size</div>
@@ -248,7 +247,7 @@
   <!-- RESIZE HANDLE -->
   <div class="resize-handle" id="resizeHandle"></div>
 
-  <!-- ══ EDITOR + OUTPUT COLUMN ══ -->
+  <!-- EDITOR + OUTPUT COLUMN -->
   <div class="editor-column">
 
     <!-- TAB BAR -->
@@ -272,11 +271,9 @@
     <!-- EDITOR PANE -->
     <div class="editor-pane" id="editorPane">
       <div class="gutter" id="gutter">1</div>
-      <!-- code-wrap holds BOTH the highlight layer and the textarea -->
+      <!-- CSS Grid overlay: pre + textarea share the same cell → correct caret position -->
       <div class="code-wrap" id="codeWrap">
-        <!-- Syntax highlight backdrop — updated by JS on every keystroke -->
         <pre id="highlightLayer" aria-hidden="true"></pre>
-        <!-- The real editable textarea — text is transparent, caret shows through -->
         <textarea id="codeEditor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
           placeholder="# मराठीकोड येथे लिहा…"
 ># स्वागत — मराठीकोड IDE मध्ये!
@@ -308,9 +305,7 @@ nahitar:
 
     <!-- OUTPUT PANE -->
     <div class="output-pane" id="outputPane">
-      <!-- Output drag handle -->
       <div class="output-drag" id="outputDrag"></div>
-
       <div class="output-titlebar">
         <div class="output-tabs">
           <button class="out-tab active" data-out="terminal">
@@ -343,7 +338,6 @@ nahitar:
             <p>कोड लिहा आणि <strong>चालवा</strong> दाबा &nbsp;<kbd>⌘↵</kbd></p>
           </div>
         </div>
-        <!-- Inline Input Row -->
         <div class="inline-input-row" id="inlineInputRow" style="display:none">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 17l6-6-6-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="inline-prompt" id="inlineInputPrompt"></span>
@@ -362,14 +356,29 @@ nahitar:
           </div>
         </div>
       </div>
+    </div>
 
-    </div><!-- /output-pane -->
+    <!-- MOBILE BOTTOM TOOLBAR -->
+    <div class="mobile-bottom-bar" id="mobileBottomBar">
+      <button class="tb-icon-btn" id="mobileMenuBtn2" title="मेनू">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="run-btn" id="runBtnMobile">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4.75a.75.75 0 0 0-1.166.624v13.252a.75.75 0 0 0 1.166.624l10.5-6.626a.75.75 0 0 0 0-1.248L6 4.75Z"/></svg>
+        <span>चालवा</span>
+      </button>
+      <button class="tb-icon-btn" id="clearOutputMobileBtn" title="Output साफ करा">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="tb-icon-btn" id="themeMobileBtn" title="थीम">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
   </div><!-- /editor-column -->
 </div><!-- /app-body -->
 
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║              STATUS BAR                 ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
+<!-- STATUS BAR -->
 <div class="statusbar">
   <div class="sb-left">
     <span class="sb-item sb-branch">
@@ -397,16 +406,12 @@ nahitar:
   <span>चालवत आहे…</span>
 </div>
 
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║       CUSTOM MODAL (alert/confirm/prompt) ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
+<!-- CUSTOM MODAL -->
 <div class="mc-modal-overlay" id="mcModalOverlay" role="dialog" aria-modal="true">
   <div class="mc-modal" id="mcModal">
     <div class="mc-modal-stripe"></div>
     <div class="mc-modal-header">
-      <div class="mc-modal-icon" id="mcModalIcon">
-        <!-- icon injected by JS -->
-      </div>
+      <div class="mc-modal-icon" id="mcModalIcon"></div>
       <span class="mc-modal-title" id="mcModalTitle">सूचना</span>
     </div>
     <div class="mc-modal-body">
@@ -416,9 +421,7 @@ nahitar:
       </div>
     </div>
     <div class="mc-modal-footer-divider"></div>
-    <div class="mc-modal-footer" id="mcModalFooter">
-      <!-- buttons injected by JS -->
-    </div>
+    <div class="mc-modal-footer" id="mcModalFooter"></div>
   </div>
 </div>
 
