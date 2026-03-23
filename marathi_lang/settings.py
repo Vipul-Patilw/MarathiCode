@@ -4,7 +4,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'marathi-code-secret-key-change-in-production-xyz123'
 DEBUG = False
-ALLOWED_HOSTS = ['https://marathicode.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.staticfiles',
