@@ -229,7 +229,7 @@ svg{display:block;flex-shrink:0}
 .tab-bar-actions{display:flex;align-items:center;padding:0 6px}
 
 /* ── EDITOR PANE ── */
-.editor-pane{flex:1;display:flex;overflow:hidden;background:var(--c-bg)}
+.editor-pane{flex:1;display:flex;overflow:hidden;background:var(--c-bg);min-height:0}
 .gutter{width:48px;flex-shrink:0;padding:16px 10px 16px 0;text-align:right;font-family:var(--font-mono);font-size:12px;line-height:1.72;color:var(--c-text-4);background:var(--c-bg);border-right:1px solid var(--c-border-soft);overflow:hidden;white-space:pre;user-select:none}
 
 /* ═══════════════════════════════════════════════════
@@ -240,11 +240,7 @@ svg{display:block;flex-shrink:0}
    min-height:100% makes it grow to content → no scroll.
    ═══════════════════════════════════════════════════ */
 .code-wrap{
-  flex:1;
-  display:grid;          /* single cell, both children overlap */
-  overflow:hidden;       /* outer container does NOT scroll */
-  background:var(--c-bg);
-  min-width:0;
+  flex:1;display:grid;overflow:hidden;background:var(--c-bg);min-width:0;min-height:0;
 }
 
 /* Shared typography — must be identical on both */
@@ -432,10 +428,19 @@ svg{display:block;flex-shrink:0}
   .titlebar{padding:0 8px;gap:4px}
   .titlebar-center{display:none}
   .titlebar-left,.titlebar-right{min-width:auto}
-  .titlebar-right{gap:4px}
+  
+  .titlebar-right{gap:4px;justify-content:flex-end}
   .app-name-sub{display:none}
   .tb-divider{display:none}
-  .run-btn{display:none}                  /* moved to bottom bar */
+.titlebar .run-btn span,
+.titlebar .run-btn kbd{display:none}        /* hide text+kbd, keep icon */
+.titlebar .run-btn{
+  width:32px;height:32px;padding:0;
+  justify-content:center;
+  border-radius:var(--r-sm);
+  box-shadow:none;
+}
+.mobile-bottom-bar .run-btn{display:none}   /* remove from bottom bar */             /* moved to bottom bar */
   .mobile-menu-btn{display:flex}
 
   /* Desktop sidebar/actbar hidden */
