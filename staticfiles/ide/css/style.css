@@ -259,6 +259,7 @@ svg{display:block;flex-shrink:0}
   margin: 0;
   border: none;
   outline: none;
+   overflow: auto;
 }
 
 /* Highlight pre — behind textarea, scrolled by JS */
@@ -271,6 +272,7 @@ svg{display:block;flex-shrink:0}
   word-wrap:normal;
   min-height:100%;       /* pre CAN grow taller than its cell */
   align-self:start;
+  
 }
 #highlightLayer .hl-kw     {color:var(--syn-kw);font-weight:500}
 #highlightLayer .hl-fn     {color:var(--syn-fn);font-style:italic}
@@ -515,4 +517,51 @@ svg{display:block;flex-shrink:0}
   .inline-send-btn{width:40px;height:40px}
   .out-tab{padding:10px 12px}
   .mnav-btn{padding:10px 4px}
+}
+/* ───────── CODE EDITOR FIX ───────── */
+
+/* Wrapper */
+.code-wrap {
+  position: relative;
+  height: 100%;
+}
+
+/* BOTH must be identical */
+#codeEditor,
+#highlightLayer {
+  width: 100%;
+  height: 100%;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 10px;
+  box-sizing: border-box;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Highlight layer (background text) */
+#highlightLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: hidden; /* important */
+}
+
+/* Textarea (actual typing layer) */
+#codeEditor {
+  position: relative;
+  background: transparent;
+  color: transparent;       /* hide original text */
+  caret-color: black;       /* show cursor */
+  border: none;
+  outline: none;
+  resize: none;
+  overflow: auto;           /* only this scrolls */
+}
+
+/* Optional: smooth scroll */
+#codeEditor {
+  scroll-behavior: smooth;
 }
