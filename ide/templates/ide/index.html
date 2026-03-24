@@ -14,8 +14,7 @@
 <!-- TITLE BAR -->
 <div class="titlebar">
   <div class="titlebar-left">
-    <!-- Mobile menu toggle (hidden on desktop) -->
-    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="मेनू उघडा">
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="मेनू">
       <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
     <div class="app-logo">
@@ -26,7 +25,7 @@
       </svg>
       <div class="app-name">
         <span class="app-name-main">मराठीकोड</span>
-        <span class="app-name-sub">IDE  v1.0</span>
+        <span class="app-name-sub">IDE v1.0</span>
       </div>
     </div>
   </div>
@@ -42,9 +41,6 @@
     <button class="tb-icon-btn" id="themeToggleBtn" title="थीम बदला">
       <svg id="themeIcon" viewBox="0 0 24 24" fill="none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
-    <button class="tb-icon-btn" id="settingsBtn" title="Settings">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.8"/></svg>
-    </button>
     <div class="tb-divider"></div>
     <button class="run-btn" id="runBtn">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4.75a.75.75 0 0 0-1.166.624v13.252a.75.75 0 0 0 1.166.624l10.5-6.626a.75.75 0 0 0 0-1.248L6 4.75Z"/></svg>
@@ -54,13 +50,11 @@
   </div>
 </div>
 
-<!-- Sidebar overlay (mobile tap-to-close) -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<!-- APP BODY -->
 <div class="app-body">
 
-  <!-- ACTIVITY BAR -->
+  <!-- ACTIVITY BAR (desktop only) -->
   <nav class="activity-bar">
     <div class="activity-top">
       <button class="act-btn active" data-panel="explorer" title="फाईल्स">
@@ -78,13 +72,39 @@
     </div>
     <div class="activity-bottom">
       <button class="act-btn" data-panel="settings-panel" title="Settings">
-        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.7"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.8"/></svg>
       </button>
     </div>
   </nav>
 
   <!-- SIDE PANEL -->
   <aside class="side-panel" id="sidePanel">
+
+    <!-- ═══ MOBILE NAV STRIP (visible only on mobile via CSS) ═══
+         Replaces the activity bar for navigation inside the drawer.
+         Buttons mirror the desktop act-btn data-panel values. -->
+    <div class="mobile-nav-strip" id="mobileNavStrip">
+      <button class="mnav-btn active" data-panel="explorer">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 7a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l1.414 1.414A1 1 0 0 0 13.414 7H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        <span>Files</span>
+      </button>
+      <button class="mnav-btn" data-panel="search">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.7"/><path d="m20 20-3-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span>शोध</span>
+      </button>
+      <button class="mnav-btn" data-panel="examples">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        <span>उदाहरणे</span>
+      </button>
+      <button class="mnav-btn" data-panel="docs">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        <span>Docs</span>
+      </button>
+      <button class="mnav-btn" data-panel="settings-panel">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.8"/></svg>
+        <span>Settings</span>
+      </button>
+    </div>
 
     <!-- EXPLORER -->
     <div class="panel-view active" id="panel-explorer">
@@ -214,24 +234,16 @@
       </div>
     </div>
 
-    <!-- SETTINGS PANEL -->
+    <!-- SETTINGS -->
     <div class="panel-view" id="panel-settings-panel">
       <div class="panel-header"><span class="panel-title">PREFERENCES</span></div>
       <div class="settings-scroll">
         <div class="docs-group-label">थीम</div>
         <div class="theme-grid">
-          <button class="theme-tile active" data-theme="dark">
-            <div class="theme-preview tp-dark"></div><span>गडद</span>
-          </button>
-          <button class="theme-tile" data-theme="light">
-            <div class="theme-preview tp-light"></div><span>उजळ</span>
-          </button>
-          <button class="theme-tile" data-theme="saffron">
-            <div class="theme-preview tp-saffron"></div><span>केशरी</span>
-          </button>
-          <button class="theme-tile" data-theme="midnight">
-            <div class="theme-preview tp-midnight"></div><span>Midnight</span>
-          </button>
+          <button class="theme-tile active" data-theme="dark"><div class="theme-preview tp-dark"></div><span>गडद</span></button>
+          <button class="theme-tile" data-theme="light"><div class="theme-preview tp-light"></div><span>उजळ</span></button>
+          <button class="theme-tile" data-theme="saffron"><div class="theme-preview tp-saffron"></div><span>केशरी</span></button>
+          <button class="theme-tile" data-theme="midnight"><div class="theme-preview tp-midnight"></div><span>Midnight</span></button>
         </div>
         <div class="docs-group-label" style="margin-top:20px">Font Size</div>
         <div class="font-size-row">
@@ -244,25 +256,23 @@
 
   </aside>
 
-  <!-- RESIZE HANDLE -->
   <div class="resize-handle" id="resizeHandle"></div>
 
-  <!-- EDITOR + OUTPUT COLUMN -->
+  <!-- EDITOR COLUMN -->
   <div class="editor-column">
 
-    <!-- TAB BAR -->
     <div class="tab-bar">
       <div class="editor-tabs" id="editorTabs">
         <div class="editor-tab active" data-file="main">
           <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5"/></svg>
           <span>main.mc</span>
-          <button class="tab-close" data-file="main" title="बंद करा">
+          <button class="tab-close" data-file="main">
             <svg viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </button>
         </div>
       </div>
       <div class="tab-bar-actions">
-        <button class="tb-icon-btn" id="splitBtn" title="Split">
+        <button class="tb-icon-btn" id="splitBtn">
           <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M12 3v18" stroke="currentColor" stroke-width="1.7"/></svg>
         </button>
       </div>
@@ -271,7 +281,6 @@
     <!-- EDITOR PANE -->
     <div class="editor-pane" id="editorPane">
       <div class="gutter" id="gutter">1</div>
-      <!-- CSS Grid overlay: pre + textarea share the same cell → correct caret position -->
       <div class="code-wrap" id="codeWrap">
         <pre id="highlightLayer" aria-hidden="true"></pre>
         <textarea id="codeEditor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
@@ -322,12 +331,8 @@ nahitar:
             <span class="status-dot" id="statusDot"></span>
             <span id="statusText">तयार</span>
           </span>
-          <button class="tb-icon-btn" id="clearOutputBtn" title="साफ करा">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button class="tb-icon-btn" id="copyOutputBtn" title="Output कॉपी करा">
-            <svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.7"/></svg>
-          </button>
+          <button class="tb-icon-btn" id="clearOutputBtn"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="tb-icon-btn" id="copyOutputBtn"><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.7"/></svg></button>
         </div>
       </div>
 
@@ -351,7 +356,7 @@ nahitar:
       <div class="out-view" id="out-problems">
         <div class="output-body" id="problemsBody">
           <div class="output-welcome">
-            <svg viewBox="0 0 24 24" fill="none" class="welcome-icon-svg"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 0 0 1.946-.806 3.42 3.42 0 0 1 4.438 0 3.42 3.42 0 0 0 1.946.806 3.42 3.42 0 0 1 3.138 3.138 3.42 3.42 0 0 0 .806 1.946 3.42 3.42 0 0 1 0 4.438 3.42 3.42 0 0 0-.806 1.946 3.42 3.42 0 0 1-3.138 3.138 3.42 3.42 0 0 0-1.946.806 3.42 3.42 0 0 1-4.438 0 3.42 3.42 0 0 0-1.946-.806 3.42 3.42 0 0 1-3.138-3.138 3.42 3.42 0 0 0-.806-1.946 3.42 3.42 0 0 1 0-4.438 3.42 3.42 0 0 0 .806-1.946 3.42 3.42 0 0 1 3.138-3.138Z" stroke="currentColor" stroke-width="1.5"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" class="welcome-icon-svg"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <p>कोणत्याही समस्या नाहीत</p>
           </div>
         </div>
@@ -360,23 +365,23 @@ nahitar:
 
     <!-- MOBILE BOTTOM TOOLBAR -->
     <div class="mobile-bottom-bar" id="mobileBottomBar">
-      <button class="tb-icon-btn" id="mobileMenuBtn2" title="मेनू">
+      <button class="tb-icon-btn" id="mobileMenuBtn2">
         <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
       <button class="run-btn" id="runBtnMobile">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4.75a.75.75 0 0 0-1.166.624v13.252a.75.75 0 0 0 1.166.624l10.5-6.626a.75.75 0 0 0 0-1.248L6 4.75Z"/></svg>
         <span>चालवा</span>
       </button>
-      <button class="tb-icon-btn" id="clearOutputMobileBtn" title="Output साफ करा">
+      <button class="tb-icon-btn" id="clearOutputMobileBtn">
         <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <button class="tb-icon-btn" id="themeMobileBtn" title="थीम">
+      <button class="tb-icon-btn" id="themeMobileBtn">
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
 
-  </div><!-- /editor-column -->
-</div><!-- /app-body -->
+  </div>
+</div>
 
 <!-- STATUS BAR -->
 <div class="statusbar">
@@ -398,11 +403,8 @@ nahitar:
   </div>
 </div>
 
-<!-- LOADING OVERLAY -->
 <div class="loading-overlay" id="loadingOverlay">
-  <div class="spinner">
-    <svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="31.4 94.2"/></svg>
-  </div>
+  <div class="spinner"><svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="31.4 94.2"/></svg></div>
   <span>चालवत आहे…</span>
 </div>
 
@@ -412,7 +414,7 @@ nahitar:
     <div class="mc-modal-stripe"></div>
     <div class="mc-modal-header">
       <div class="mc-modal-icon" id="mcModalIcon"></div>
-      <span class="mc-modal-title" id="mcModalTitle">सूचना</span>
+      <span class="mc-modal-title" id="mcModalTitle"></span>
     </div>
     <div class="mc-modal-body">
       <p class="mc-modal-message" id="mcModalMessage"></p>
