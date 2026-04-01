@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="मराठीकोड — जगातील पहिली मराठी प्रोग्रामिंग भाषा आणि IDE">
+<meta name="keywords" content="MarathiCode, मराठीकोड, Marathi Programming Language, IDE, India">
+<title>मराठीकोड — मराठीत कोड करा</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Tiro+Devanagari+Marathi&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════════════════════
+   MARATHICODE LANDING PAGE
+   Aesthetic: Dark luxury · Saffron fire · Indian heritage
+   ══════════════════════════════════════════════════════════ */
+
+:root {
+  --black:   #07080f;
+  --ink:     #0d0f1a;
+  --deep:    #111420;
+  --surface: #161b2e;
+  --raised:  #1c2240;
+  --border:  #252d50;
+  --muted:   #2e3860;
+
+  --orange:  #ff7518;
+  --orange2: #ff9a4a;
+  --orange3: #ffb870;
+  --fire:    #ff4500;
+  --glow:    rgba(255,117,24,.3);
+  --glow2:   rgba(255,117,24,.12);
+
+  --white:   #f0f2ff;
+  --white2:  #b8bdd8;
+  --white3:  #6b7199;
+  --white4:  #2e3860;
+
+  --green:   #00e5a0;
+  --blue:    #4db8ff;
+  --purple:  #b88aff;
+
+  --syn-kw:  #ff8a80;
+  --syn-str: #a5d6ff;
+  --syn-num: #ffb86c;
+  --syn-cmt: #3d4a6e;
+  --syn-fn:  #c084fc;
+  --syn-bi:  #ff9a52;
+
+  --font-display: 'Syne', system-ui, sans-serif;
+  --font-dev:     'Tiro Devanagari Marathi', serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  --r:  10px;
+  --r2: 16px;
+  --r3: 24px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-display);
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── CUSTOM CURSOR ── */
+.cursor {
+  width: 12px; height: 12px;
+  background: var(--orange);
+  border-radius: 50%;
+  position: fixed; z-index: 9999;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  transition: transform .1s, width .2s, height .2s, opacity .2s;
+  mix-blend-mode: screen;
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1.5px solid rgba(255,117,24,.4);
+  border-radius: 50%;
+  position: fixed; z-index: 9998;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  transition: transform .15s ease, width .3s, height .3s, opacity .3s;
+}
+
+a, button { cursor: none; }
+
+/* ── NOISE TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* ══ NAV ═════════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px;
+  background: rgba(7,8,15,.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none;
+}
+.nav-logo-mark {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--orange), var(--fire));
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 20px var(--glow);
+}
+.nav-logo-mark span {
+  font-family: var(--font-dev);
+  font-size: 20px; color: white; line-height: 1;
+}
+.nav-logo-text {
+  font-family: var(--font-dev);
+  font-size: 20px; font-weight: 400;
+  color: var(--white);
+  letter-spacing: .01em;
+}
+.nav-logo-text em {
+  font-style: normal; color: var(--orange);
+}
+
+.nav-links {
+  display: flex; align-items: center; gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 13.5px; font-weight: 600;
+  color: var(--white3);
+  text-decoration: none; letter-spacing: .03em;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--white); }
+
+.nav-cta {
+  display: flex; align-items: center; gap: 10px;
+}
+.btn-ghost {
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: transparent;
+  color: var(--white2); font-family: var(--font-display);
+  font-size: 13px; font-weight: 600;
+  text-decoration: none;
+  transition: all .2s;
+}
+.btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+
+.btn-primary {
+  padding: 9px 24px;
+  background: var(--orange);
+  border: none; border-radius: var(--r);
+  color: white; font-family: var(--font-display);
+  font-size: 13px; font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 0 24px var(--glow);
+  transition: all .2s;
+}
+.btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 4px 30px var(--glow); }
+
+/* ══ HERO ════════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 120px 48px 80px;
+}
+
+/* Animated background grid */
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,117,24,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,117,24,.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: gridShift 20s linear infinite;
+}
+@keyframes gridShift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 48px 48px; }
+}
+
+/* Orbs */
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); pointer-events: none;
+}
+.orb-1 {
+  width: 700px; height: 700px;
+  top: -200px; left: -200px;
+  background: radial-gradient(circle, rgba(255,117,24,.15) 0%, transparent 65%);
+  animation: orbFloat1 12s ease-in-out infinite;
+}
+.orb-2 {
+  width: 500px; height: 500px;
+  bottom: -100px; right: -100px;
+  background: radial-gradient(circle, rgba(255,69,0,.1) 0%, transparent 65%);
+  animation: orbFloat2 15s ease-in-out infinite;
+}
+.orb-3 {
+  width: 300px; height: 300px;
+  top: 40%; right: 25%;
+  background: radial-gradient(circle, rgba(77,184,255,.07) 0%, transparent 65%);
+  animation: orbFloat3 10s ease-in-out infinite;
+}
+@keyframes orbFloat1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,30px)} }
+@keyframes orbFloat2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,-40px)} }
+@keyframes orbFloat3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-20px)} }
+
+/* Diagonal accent */
+.hero-diag {
+  position: absolute; width: 2px; height: 120vh;
+  background: linear-gradient(180deg, transparent 0%, rgba(255,117,24,.2) 40%, rgba(255,117,24,.2) 60%, transparent 100%);
+  top: -10vh; left: 55%;
+  transform: rotate(12deg); transform-origin: top;
+}
+
+.hero-content {
+  position: relative; z-index: 10;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 64px; align-items: center;
+  max-width: 1280px; width: 100%;
+}
+
+.hero-left { display: flex; flex-direction: column; gap: 0; }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,117,24,.1);
+  border: 1px solid rgba(255,117,24,.25);
+  border-radius: 100px;
+  padding: 7px 18px; margin-bottom: 28px; width: fit-content;
+  animation: fadeSlideUp .6s ease both;
+}
+.badge-pulse {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 8px var(--orange);
+  animation: badgePulse 2s ease infinite;
+}
+@keyframes badgePulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+.hero-badge span {
+  font-size: 11.5px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--orange2);
+}
+
+.hero-h1 {
+  font-family: var(--font-dev);
+  font-size: clamp(52px, 6vw, 80px);
+  font-weight: 400; line-height: 1.05;
+  color: var(--white); margin-bottom: 10px;
+  animation: fadeSlideUp .6s .1s ease both;
+}
+.hero-h1 .fire-text {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange3) 50%, #fff 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.2vw, 26px);
+  font-weight: 400; color: var(--white3);
+  letter-spacing: -.01em; margin-bottom: 32px; line-height: 1.5;
+  animation: fadeSlideUp .6s .2s ease both;
+}
+.hero-h2 strong { color: var(--white2); font-weight: 600; }
+
+.hero-desc {
+  font-size: 15px; color: var(--white3);
+  line-height: 1.75; margin-bottom: 40px;
+  max-width: 480px;
+  animation: fadeSlideUp .6s .3s ease both;
+}
+.hero-desc strong { color: var(--orange2); font-weight: 600; }
+
+.hero-actions {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  animation: fadeSlideUp .6s .4s ease both;
+}
+.btn-hero {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--orange), var(--fire));
+  border: none; border-radius: var(--r2);
+  color: white; font-family: var(--font-display);
+  font-size: 15px; font-weight: 700;
+  text-decoration: none; letter-spacing: .01em;
+  box-shadow: 0 0 40px var(--glow), 0 4px 20px rgba(255,69,0,.3);
+  transition: all .25s;
+  position: relative; overflow: hidden;
+}
+.btn-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.15), transparent);
+  opacity: 0; transition: opacity .25s;
+}
+.btn-hero:hover { transform: translateY(-2px); box-shadow: 0 0 60px var(--glow), 0 8px 30px rgba(255,69,0,.4); }
+.btn-hero:hover::before { opacity: 1; }
+.btn-hero svg { width: 18px; height: 18px; }
+
+.btn-outline-hero {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 28px;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r2);
+  color: var(--white2); font-family: var(--font-display);
+  font-size: 15px; font-weight: 600;
+  text-decoration: none;
+  transition: all .2s;
+}
+.btn-outline-hero:hover { border-color: var(--orange); color: var(--orange); background: var(--glow2); }
+.btn-outline-hero svg { width: 16px; height: 16px; }
+
+.hero-stats {
+  display: flex; gap: 32px; margin-top: 48px;
+  animation: fadeSlideUp .6s .5s ease both;
+}
+.hero-stat { display: flex; flex-direction: column; gap: 4px; }
+.hero-stat-num {
+  font-size: 32px; font-weight: 800; color: var(--white);
+  letter-spacing: -.03em; line-height: 1;
+}
+.hero-stat-num span { color: var(--orange); }
+.hero-stat-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--white4);
+}
+.hero-stat-divider { width: 1px; background: var(--border); align-self: stretch; }
+
+/* Hero right — IDE mockup */
+.hero-right {
+  position: relative;
+  animation: fadeSlideRight .8s .2s ease both;
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeSlideRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* IDE WINDOW */
+.ide-window {
+  background: #0e1120;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow:
+    0 50px 100px rgba(0,0,0,.7),
+    0 0 0 1px rgba(255,117,24,.08),
+    0 0 80px rgba(255,117,24,.06);
+  overflow: hidden;
+  position: relative;
+}
+.ide-window::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,117,24,.4), transparent);
+}
+
+.ide-titlebar {
+  height: 42px; background: #13172b;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  display: flex; align-items: center; padding: 0 16px; gap: 14px;
+}
+.win-dots { display: flex; gap: 7px; }
+.wd { width: 12px; height: 12px; border-radius: 50%; }
+.wd-r { background: #ff5f57; }
+.wd-y { background: #ffbd2e; }
+.wd-g { background: #28ca41; }
+.ide-tab {
+  flex: 1; display: flex; justify-content: center;
+}
+.ide-tab-item {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 16px;
+  background: #0e1120;
+  border-radius: 7px 7px 0 0;
+  border: 1px solid rgba(255,255,255,.07);
+  border-bottom: 2px solid var(--orange);
+  font-family: var(--font-mono);
+  font-size: 11px; color: rgba(255,255,255,.6);
+}
+.tab-dot { width: 6px; height: 6px; background: var(--orange); border-radius: 50%; }
+
+.ide-body { display: flex; min-height: 320px; }
+
+.ide-sidebar {
+  width: 44px; background: #0b0e1c;
+  border-right: 1px solid rgba(255,255,255,.04);
+  display: flex; flex-direction: column; align-items: center; padding: 12px 0; gap: 8px;
+}
+.ide-act { width: 30px; height: 30px; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.ide-act.on { background: rgba(255,117,24,.15); }
+.ide-act svg { width: 15px; height: 15px; }
+.act-on { color: var(--orange); }
+.act-off { color: rgba(255,255,255,.2); }
+
+.ide-files {
+  width: 148px; background: #0d1020;
+  border-right: 1px solid rgba(255,255,255,.04);
+  padding: 10px 0;
+}
+.file-sec-label {
+  font-size: 8.5px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: rgba(255,255,255,.2);
+  padding: 6px 12px 4px; display: block;
+}
+.file-entry {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 10px;
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: rgba(255,255,255,.4);
+}
+.file-entry.active { background: rgba(255,117,24,.1); color: var(--orange2); }
+.file-entry svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+.ide-editor {
+  flex: 1; background: #080c1a; display: flex; flex-direction: column;
+}
+.code-area { display: flex; flex: 1; padding: 14px 0; }
+.line-nums {
+  padding: 0 12px 0 8px; text-align: right;
+  font-family: var(--font-mono); font-size: 10.5px; line-height: 1.8;
+  color: rgba(255,255,255,.15); user-select: none; flex-shrink: 0;
+}
+.code-content {
+  flex: 1; padding-right: 16px;
+  font-family: var(--font-mono); font-size: 11px; line-height: 1.8;
+}
+.cl { display: block; white-space: pre; }
+.kw  { color: var(--syn-kw); }
+.fn  { color: var(--syn-fn); }
+.str { color: var(--syn-str); }
+.num { color: var(--syn-num); }
+.cmt { color: var(--syn-cmt); font-style: italic; }
+.bi  { color: var(--syn-bi); }
+.op  { color: var(--orange); }
+.id  { color: var(--white); }
+.in  { display: inline-block; width: 20px; }
+
+.ide-output {
+  background: #0d1122;
+  border-top: 1px solid rgba(255,255,255,.05);
+  padding: 8px 16px;
+}
+.out-bar {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+}
+.out-tab-lbl {
+  font-size: 10px; font-weight: 600; color: rgba(255,255,255,.5);
+  display: flex; align-items: center; gap: 5px;
+  border-bottom: 1.5px solid var(--orange);
+  padding-bottom: 3px;
+}
+.out-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); }
+.out-line { font-family: var(--font-mono); font-size: 10.5px; color: rgba(255,255,255,.65); line-height: 1.7; }
+.out-line.ok { color: var(--green); }
+
+.ide-statusbar {
+  height: 22px; background: var(--orange);
+  display: flex; align-items: center; padding: 0 14px; gap: 16px;
+}
+.sb-t { font-size: 9.5px; font-weight: 600; color: rgba(255,255,255,.8); letter-spacing: .04em; }
+
+/* Float tags on IDE */
+.float-tag {
+  position: absolute;
+  background: rgba(13,17,34,.9);
+  border: 1px solid rgba(255,117,24,.3);
+  border-radius: var(--r);
+  padding: 8px 14px;
+  font-size: 12px; font-weight: 600; color: var(--orange2);
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+}
+.ft1 { top: 60px; right: -60px; animation: floatTag 4s ease-in-out infinite; }
+.ft2 { bottom: 130px; right: -70px; animation: floatTag 4s 1.3s ease-in-out infinite; }
+.ft3 { bottom: 50px; left: -55px; animation: floatTag 4s 2.6s ease-in-out infinite; }
+@keyframes floatTag { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+/* ══ SECTION COMMON ══════════════════════════════════ */
+section { position: relative; overflow: hidden; }
+.section-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 48px;
+}
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--orange2);
+  margin-bottom: 16px;
+}
+.section-label::before {
+  content: ''; width: 24px; height: 1.5px; background: var(--orange);
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800; color: var(--white);
+  letter-spacing: -.03em; line-height: 1.1;
+  margin-bottom: 16px;
+}
+.section-title .accent { color: var(--orange); }
+.section-sub {
+  font-size: 16px; color: var(--white3); line-height: 1.7;
+  max-width: 560px; margin-bottom: 56px;
+}
+
+/* ══ KEYWORDS SECTION ════════════════════════════════ */
+.keywords-section {
+  padding: 120px 0;
+  background: var(--ink);
+}
+.kw-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+.kw-card {
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 20px 18px;
+  position: relative; overflow: hidden;
+  transition: all .25s;
+  cursor: default;
+}
+.kw-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--orange), transparent);
+  opacity: .4; transition: opacity .25s;
+}
+.kw-card:hover {
+  border-color: rgba(255,117,24,.4);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0,0,0,.4), 0 0 0 1px rgba(255,117,24,.1);
+}
+.kw-card:hover::before { opacity: 1; }
+.kw-en {
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--white4); margin-bottom: 6px; letter-spacing: .03em;
+}
+.kw-mr {
+  font-family: var(--font-mono); font-size: 15px; font-weight: 700;
+  color: var(--syn-kw); margin-bottom: 4px;
+}
+.kw-mr.io  { color: var(--syn-bi); }
+.kw-mr.fn  { color: var(--syn-fn); }
+.kw-mr.bool { color: var(--syn-str); }
+.kw-mr.loop { color: var(--green); }
+.kw-dev {
+  font-family: var(--font-dev); font-size: 12px;
+  color: rgba(255,255,255,.35); line-height: 1.3;
+}
+
+/* ══ CODE COMPARISON ═════════════════════════════════ */
+.compare-section {
+  padding: 120px 0;
+  background: var(--black);
+}
+.compare-grid {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 24px; align-items: center;
+}
+.code-panel {
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: var(--r2); overflow: hidden;
+  transition: transform .3s, box-shadow .3s;
+}
+.code-panel:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+.code-panel.mc { border-color: rgba(255,117,24,.2); }
+.code-panel.mc:hover { box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(255,117,24,.1); }
+
+.panel-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 18px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.panel-dots { display: flex; gap: 6px; }
+.pd { width: 10px; height: 10px; border-radius: 50%; }
+.pd-r { background: #ff5f57; } .pd-y { background: #ffbd2e; } .pd-g { background: #28ca41; }
+.panel-fname {
+  font-family: var(--font-mono); font-size: 11px;
+  color: rgba(255,255,255,.4); margin-left: 6px;
+}
+.panel-lang {
+  margin-left: auto;
+  font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 20px;
+}
+.lang-py { background: rgba(96,165,250,.1); color: #60a5fa; }
+.lang-mc { background: rgba(255,117,24,.1); color: var(--orange); }
+
+.panel-code {
+  padding: 20px 24px;
+  font-family: var(--font-mono); font-size: 12.5px; line-height: 1.8;
+}
+.panel-code .pcl { display: block; }
+.py-kw  { color: #60a5fa; }
+.py-fn  { color: #c084fc; }
+.py-str { color: #86efac; }
+.py-bi  { color: #f9a8d4; }
+.py-num { color: #fdba74; }
+.py-cmt { color: #3d4a6e; font-style: italic; }
+.py-id  { color: #e2e8f0; }
+.py-in  { display: inline-block; width: 24px; }
+
+.panel-caption {
+  padding: 14px 24px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px; color: var(--white3); line-height: 1.5;
+}
+.panel-caption.mc-cap { color: rgba(255,150,80,.6); }
+.panel-caption strong { color: var(--white2); }
+.panel-caption.mc-cap strong { color: var(--orange2); }
+
+.vs-circle {
+  width: 56px; height: 56px;
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 800; color: var(--white3);
+  flex-shrink: 0;
+}
+
+/* ══ FEATURES SECTION ════════════════════════════════ */
+.features-section {
+  padding: 120px 0;
+  background: var(--ink);
+}
+.features-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.feat-card {
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 32px 28px;
+  transition: all .25s; position: relative; overflow: hidden;
+}
+.feat-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--orange), transparent);
+  opacity: 0; transition: opacity .25s;
+}
+.feat-card:hover { border-color: rgba(255,117,24,.3); transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,.4); }
+.feat-card:hover::after { opacity: 1; }
+
+.feat-icon {
+  width: 52px; height: 52px;
+  background: var(--glow2); border-radius: var(--r);
+  border: 1px solid rgba(255,117,24,.2);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.feat-icon svg { width: 24px; height: 24px; color: var(--orange); }
+
+.feat-title {
+  font-size: 18px; font-weight: 700; color: var(--white);
+  margin-bottom: 10px; letter-spacing: -.01em;
+}
+.feat-desc { font-size: 14px; color: var(--white3); line-height: 1.7; }
+
+/* ══ HOW IT WORKS ════════════════════════════════════ */
+.how-section {
+  padding: 120px 0;
+  background: var(--black);
+}
+.steps-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  position: relative;
+}
+.steps-grid::before {
+  content: ''; position: absolute;
+  top: 36px; left: 12%; right: 12%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), var(--border), transparent);
+}
+.step-card { text-align: center; position: relative; }
+.step-num {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px; position: relative; z-index: 2;
+  font-size: 22px; font-weight: 800; color: var(--orange);
+  transition: all .3s;
+}
+.step-card:hover .step-num {
+  background: var(--glow2); border-color: var(--orange);
+  box-shadow: 0 0 24px var(--glow);
+}
+.step-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+.step-desc { font-size: 13.5px; color: var(--white3); line-height: 1.65; }
+
+/* ══ TESTIMONIAL / QUOTE SECTION ══════════════════════ */
+.quote-section {
+  padding: 100px 0;
+  background: var(--ink);
+}
+.quote-inner {
+  max-width: 860px; margin: 0 auto; text-align: center; padding: 0 48px;
+}
+.quote-mark {
+  font-family: var(--font-dev);
+  font-size: 80px; line-height: .6;
+  color: var(--orange); opacity: .3;
+  display: block; margin-bottom: 16px;
+}
+.quote-text {
+  font-family: var(--font-dev);
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.6; color: var(--white2);
+  margin-bottom: 32px;
+}
+.quote-text strong { color: var(--orange2); }
+.quote-author {
+  display: flex; align-items: center; gap: 14px; justify-content: center;
+}
+.quote-avatar {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--orange), var(--fire));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-dev); font-size: 22px; color: white;
+}
+.quote-info { text-align: left; }
+.quote-name { font-size: 15px; font-weight: 700; color: var(--white); }
+.quote-role { font-size: 12px; color: var(--white3); }
+
+/* ══ CTA SECTION ═════════════════════════════════════ */
+.cta-section {
+  padding: 120px 0;
+  background: var(--black);
+  text-align: center;
+}
+.cta-card {
+  max-width: 760px; margin: 0 auto;
+  background: var(--deep);
+  border: 1px solid rgba(255,117,24,.2);
+  border-radius: 28px;
+  padding: 72px 48px;
+  position: relative; overflow: hidden;
+}
+.cta-card::before {
+  content: '';
+  position: absolute; top: -100px; left: 50%;
+  transform: translateX(-50%);
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(255,117,24,.15) 0%, transparent 65%);
+  border-radius: 50%; pointer-events: none;
+}
+.cta-title {
+  font-family: var(--font-dev);
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 400; color: var(--white); margin-bottom: 16px; line-height: 1.15;
+}
+.cta-title .fire { color: var(--orange); }
+.cta-sub {
+  font-size: 16px; color: var(--white3); margin-bottom: 40px; line-height: 1.7;
+}
+.cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+/* ══ FOOTER ══════════════════════════════════════════ */
+footer {
+  background: var(--ink);
+  border-top: 1px solid var(--border);
+  padding: 48px;
+}
+.footer-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px;
+}
+.footer-logo {
+  display: flex; align-items: center; gap: 10px; text-decoration: none;
+}
+.footer-logo-m {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--orange), var(--fire));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-dev); font-size: 18px; color: white;
+}
+.footer-logo-text { font-family: var(--font-dev); font-size: 18px; color: var(--white); }
+.footer-links { display: flex; gap: 28px; }
+.footer-links a { font-size: 13px; color: var(--white3); text-decoration: none; transition: color .2s; }
+.footer-links a:hover { color: var(--orange); }
+.footer-copy { font-size: 12.5px; color: var(--white4); }
+
+/* ══ SCROLL REVEAL ═══════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: .1s; }
+.reveal-delay-2 { transition-delay: .2s; }
+.reveal-delay-3 { transition-delay: .3s; }
+.reveal-delay-4 { transition-delay: .4s; }
+
+/* ══ RESPONSIVE ══════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .hero-content { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .kw-grid { grid-template-columns: repeat(3, 1fr); }
+  .compare-grid { grid-template-columns: 1fr; }
+  .vs-circle { display: none; }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps-grid::before { display: none; }
+}
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 20px 60px; }
+  .section-inner { padding: 0 20px; }
+  .kw-grid { grid-template-columns: repeat(2, 1fr); }
+  .features-grid { grid-template-columns: 1fr; }
+  footer { padding: 32px 20px; }
+  .footer-inner { flex-direction: column; text-align: center; }
+  .cursor, .cursor-ring { display: none; }
+}
+
+/* ══ SCROLLBAR ═══════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--orange); }
+/* ═══════════════════════════════════════════════════════
+   🔥 ADVANCED RESPONSIVE FIXES (ADD THIS AT END)
+   ═══════════════════════════════════════════════════════ */
+
+/* Container max width for very large screens */
+.section-inner {
+  max-width: 1200px;
+  width: 100%;
+}
+
+/* Prevent overflow everywhere */
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+.ide-window {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Better button wrapping */
+.hero-actions,
+.cta-btns {
+  flex-wrap: wrap;
+}
+
+/* Fix hero stats on mobile */
+@media (max-width: 600px) {
+  .hero-stats {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .hero-stat-divider {
+    display: none;
+  }
+}
+
+/* Navbar responsive */
+@media (max-width: 900px) {
+  nav {
+    padding: 0 16px;
+  }
+
+  .nav-cta {
+    gap: 6px;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+}
+
+/* Hero improvements */
+@media (max-width: 768px) {
+  .hero-h1 {
+    font-size: clamp(34px, 8vw, 48px);
+  }
+
+  .hero-h2 {
+    font-size: 16px;
+  }
+
+  .hero-desc {
+    font-size: 14px;
+  }
+}
+
+/* Extra small devices (iPhone SE, etc.) */
+@media (max-width: 480px) {
+  .hero {
+    padding: 90px 16px 50px;
+  }
+
+  .section-inner {
+    padding: 0 16px;
+  }
+
+  .hero-h1 {
+    font-size: 30px;
+    line-height: 1.2;
+  }
+
+  .hero-actions a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-hero,
+  .btn-outline-hero {
+    width: 100%;
+  }
+
+  .kw-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-card {
+    padding: 40px 20px;
+  }
+}
+
+/* Tablet fixes */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero-content {
+    gap: 40px;
+  }
+
+  .kw-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Large screens (better spacing) */
+@media (min-width: 1440px) {
+  .hero {
+    padding: 140px 80px;
+  }
+
+  .section-inner {
+    max-width: 1320px;
+  }
+}
+
+/* Fix IDE overflow on small screens */
+@media (max-width: 768px) {
+  .ide-body {
+    flex-direction: column;
+  }
+
+  .ide-sidebar,
+  .ide-files {
+    display: none;
+  }
+
+  .code-area {
+    overflow-x: auto;
+  }
+}
+
+/* Prevent text overflow */
+p, h1, h2, h3, h4, h5 {
+  word-wrap: break-word;
+}
+
+/* Smooth scaling for everything */
+body {
+  -webkit-text-size-adjust: 100%;
+}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark"><span>म</span></div>
+    <span class="nav-logo-text">मराठी<em>कोड</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#keywords">कीवर्ड्स</a></li>
+    <li><a href="#features">वैशिष्ट्ये</a></li>
+    <li><a href="#compare">तुलना</a></li>
+    <li><a href="#how">कसे करावे</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/ide" class="btn-ghost" >Demo पहा</a>
+    <a href="/ide" class="btn-primary" >आत्ता वापरा</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="hero-diag"></div>
+
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <div class="badge-pulse"></div>
+        <span>जगातील पहिली · World's First</span>
+      </div>
+
+      <h1 class="hero-h1">
+        <span class="fire-text">मराठीत</span><br>
+        कोड करा
+      </h1>
+      <h2 class="hero-h2">
+        Code in <strong>Marathi.</strong><br>Run in Reality.
+      </h2>
+      <p class="hero-desc">
+        मराठीकोड — एक संपूर्ण प्रोग्रामिंग भाषा आणि IDE जिथे तुम्ही
+        <strong>मराठी keywords</strong> वापरून code लिहू शकता.
+        8 कोटी मराठी भाषकांसाठी बनवले.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/ide"  class="btn-hero">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4.75a.75.75 0 0 0-1.166.624v13.252a.75.75 0 0 0 1.166.624l10.5-6.626a.75.75 0 0 0 0-1.248L6 4.75Z"/></svg>
+          IDE उघडा — Live Demo
+        </a>
+        <a href="#keywords" class="btn-outline-hero">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          कीवर्ड्स पहा
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">20<span>+</span></div>
+          <div class="hero-stat-label">Keywords</div>
+        </div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">12<span>+</span></div>
+          <div class="hero-stat-label">Examples</div>
+        </div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">4</div>
+          <div class="hero-stat-label">Themes</div>
+        </div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">8<span>cr</span></div>
+          <div class="hero-stat-label">Speakers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDE Mockup -->
+    <div class="hero-right">
+      <div class="ide-window">
+        <div class="ide-titlebar">
+          <div class="win-dots">
+            <div class="wd wd-r"></div><div class="wd wd-y"></div><div class="wd wd-g"></div>
+          </div>
+          <div class="ide-tab">
+            <div class="ide-tab-item"><div class="tab-dot"></div>namaskar.mc</div>
+          </div>
+        </div>
+        <div class="ide-body">
+          <div class="ide-sidebar">
+            <div class="ide-act on">
+              <svg viewBox="0 0 24 24" fill="none" class="act-on"><path d="M3 7a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l1.414 1.414A1 1 0 0 0 13.414 7H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="1.6"/></svg>
+            </div>
+            <div class="ide-act">
+              <svg viewBox="0 0 24 24" fill="none" class="act-off"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="m20 20-3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <div class="ide-act">
+              <svg viewBox="0 0 24 24" fill="none" class="act-off"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" stroke-width="1.6"/></svg>
+            </div>
+          </div>
+          <div class="ide-files">
+            <span class="file-sec-label">Explorer</span>
+            <div class="file-entry active">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z" stroke="currentColor" stroke-width="1.5"/></svg>
+              namaskar.mc
+            </div>
+            <div class="file-entry">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z" stroke="currentColor" stroke-width="1.5"/></svg>
+              fibonacci.mc
+            </div>
+            <div class="file-entry">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z" stroke="currentColor" stroke-width="1.5"/></svg>
+              padhha.mc
+            </div>
+          </div>
+          <div class="ide-editor">
+            <div class="code-area">
+              <div class="line-nums">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12</div>
+              <div class="code-content">
+                <span class="cl"><span class="cmt"># मराठीकोड — Marathi Programming!</span></span>
+                <span class="cl">&nbsp;</span>
+                <span class="cl"><span class="kw">karya</span> <span class="fn">namaskar</span><span class="op">(</span><span class="id">nav</span><span class="op">):</span></span>
+                <span class="cl"><span class="in"></span><span class="bi">dakhava</span><span class="op">(</span><span class="str">"नमस्कार,"</span><span class="op">,</span> <span class="id">nav</span><span class="op">)</span></span>
+                <span class="cl"><span class="in"></span><span class="bi">dakhava</span><span class="op">(</span><span class="str">"स्वागत आहे!"</span><span class="op">)</span></span>
+                <span class="cl">&nbsp;</span>
+                <span class="cl"><span class="id">namaskar</span><span class="op">(</span><span class="str">"जग"</span><span class="op">)</span></span>
+                <span class="cl">&nbsp;</span>
+                <span class="cl"><span class="id">guni</span> <span class="op">=</span> <span class="num">85</span></span>
+                <span class="cl"><span class="kw">jar</span> <span class="id">guni</span> <span class="op">&gt;=</span> <span class="num">75</span><span class="op">:</span></span>
+                <span class="cl"><span class="in"></span><span class="bi">dakhava</span><span class="op">(</span><span class="str">"B श्रेणी!"</span><span class="op">)</span></span>
+                <span class="cl"><span class="kw">nahitar</span><span class="op">:</span></span>
+              </div>
+            </div>
+            <div class="ide-output">
+              <div class="out-bar">
+                <div class="out-tab-lbl">
+                  <svg viewBox="0 0 24 24" fill="none" style="width:10px;height:10px"><path d="M4 17l6-6-6-6M12 19h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  आउटपुट
+                  <div class="out-dot" style="margin-left:8px"></div>
+                </div>
+              </div>
+              <div class="out-line">नमस्कार, जग</div>
+              <div class="out-line">स्वागत आहे!</div>
+              <div class="out-line">B श्रेणी!</div>
+              <div class="out-line ok">✓ यशस्वीरीत्या चालले</div>
+            </div>
+            <div class="ide-statusbar">
+              <span class="sb-t">मराठीकोड v1.0</span>
+              <span class="sb-t" style="margin-left:auto">UTF-8 · ओळ 12</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Float tags -->
+      <div class="float-tag ft1">🇮🇳 Marathi Keywords</div>
+      <div class="float-tag ft2">⚡ Full Interpreter</div>
+      <div class="float-tag ft3">🎨 4 Themes</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ KEYWORDS ══ -->
+<section class="keywords-section" id="keywords">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">भाषा संदर्भ</div>
+      <h2 class="section-title">Code in <span class="accent">Marathi.</span><br>Run in Reality.</h2>
+      <p class="section-sub">प्रत्येक programming keyword आता मराठीत — जसे तुम्ही विचार करता, तसे लिहा.</p>
+    </div>
+    <div class="kw-grid reveal">
+      <div class="kw-card"><div class="kw-en">if</div><div class="kw-mr">jar</div><div class="kw-dev">जर</div></div>
+      <div class="kw-card"><div class="kw-en">else</div><div class="kw-mr">nahitar</div><div class="kw-dev">नाहीतर</div></div>
+      <div class="kw-card"><div class="kw-en">while</div><div class="kw-mr loop">jaoparyant</div><div class="kw-dev">जोपर्यंत</div></div>
+      <div class="kw-card"><div class="kw-en">for</div><div class="kw-mr loop">pratyek</div><div class="kw-dev">प्रत्येक</div></div>
+      <div class="kw-card"><div class="kw-en">in</div><div class="kw-mr loop">madhe</div><div class="kw-dev">मध्ये</div></div>
+      <div class="kw-card"><div class="kw-en">def</div><div class="kw-mr fn">karya</div><div class="kw-dev">कार्य</div></div>
+      <div class="kw-card"><div class="kw-en">return</div><div class="kw-mr fn">parat</div><div class="kw-dev">परत</div></div>
+      <div class="kw-card"><div class="kw-en">class</div><div class="kw-mr fn">varg</div><div class="kw-dev">वर्ग</div></div>
+      <div class="kw-card"><div class="kw-en">self</div><div class="kw-mr fn">swatah</div><div class="kw-dev">स्वतः</div></div>
+      <div class="kw-card"><div class="kw-en">break</div><div class="kw-mr">thamba</div><div class="kw-dev">थांब</div></div>
+      <div class="kw-card"><div class="kw-en">print()</div><div class="kw-mr io">dakhava()</div><div class="kw-dev">दाखवा</div></div>
+      <div class="kw-card"><div class="kw-en">input()</div><div class="kw-mr io">ghya()</div><div class="kw-dev">घ्या</div></div>
+      <div class="kw-card"><div class="kw-en">True</div><div class="kw-mr bool">khare</div><div class="kw-dev">खरे</div></div>
+      <div class="kw-card"><div class="kw-en">False</div><div class="kw-mr bool">khote</div><div class="kw-dev">खोटे</div></div>
+      <div class="kw-card"><div class="kw-en">None</div><div class="kw-mr bool">shunya</div><div class="kw-dev">शून्य</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ COMPARISON ══ -->
+<section class="compare-section" id="compare">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:64px">
+      <div class="section-label" style="justify-content:center">तुलना</div>
+      <h2 class="section-title">Same Logic. <span class="accent">Your Language.</span></h2>
+      <p class="section-sub" style="margin:0 auto">एकच कोड — एकात English, एकात मराठी. फरक फक्त भाषेचा. शक्ती तीच.</p>
+    </div>
+    <div class="compare-grid reveal">
+      <!-- Python -->
+      <div class="code-panel">
+        <div class="panel-header">
+          <div class="panel-dots"><div class="pd pd-r"></div><div class="pd pd-y"></div><div class="pd pd-g"></div></div>
+          <span class="panel-fname">grade_checker.py</span>
+          <span class="panel-lang lang-py">Python</span>
+        </div>
+        <div class="panel-code">
+          <span class="pcl"><span class="py-cmt"># Check student grade</span></span>
+          <span class="pcl"><span class="py-kw">def</span> <span class="py-fn">check_grade</span>(<span class="py-id">marks</span>):</span>
+          <span class="pcl"><span class="py-in"></span><span class="py-kw">if</span> <span class="py-id">marks</span> &gt;= <span class="py-num">90</span>:</span>
+          <span class="pcl"><span class="py-in"></span><span class="py-in"></span><span class="py-bi">print</span>(<span class="py-str">"Grade A"</span>)</span>
+          <span class="pcl"><span class="py-in"></span><span class="py-kw">elif</span> <span class="py-id">marks</span> &gt;= <span class="py-num">75</span>:</span>
+          <span class="pcl"><span class="py-in"></span><span class="py-in"></span><span class="py-bi">print</span>(<span class="py-str">"Grade B"</span>)</span>
+          <span class="pcl"><span class="py-in"></span><span class="py-kw">else</span>:</span>
+          <span class="pcl"><span class="py-in"></span><span class="py-in"></span><span class="py-bi">print</span>(<span class="py-str">"Study more!"</span>)</span>
+          <span class="pcl">&nbsp;</span>
+          <span class="pcl"><span class="py-id">m</span> = <span class="py-bi">int</span>(<span class="py-bi">input</span>(<span class="py-str">"Enter marks: "</span>))</span>
+          <span class="pcl"><span class="py-fn">check_grade</span>(<span class="py-id">m</span>)</span>
+        </div>
+        <div class="panel-caption">Powerful, but forces Marathi students to think in a <strong>foreign language first.</strong></div>
+      </div>
+
+      <div class="vs-circle">VS</div>
+
+      <!-- MarathiCode -->
+      <div class="code-panel mc">
+        <div class="panel-header">
+          <div class="panel-dots"><div class="pd pd-r"></div><div class="pd pd-y"></div><div class="pd pd-g"></div></div>
+          <span class="panel-fname" style="color:rgba(255,117,24,.5)">guni_tapasni.mc</span>
+          <span class="panel-lang lang-mc">मराठीकोड</span>
+        </div>
+        <div class="panel-code">
+          <span class="pcl"><span class="cmt"># विद्यार्थ्याचे गुण तपासा</span></span>
+          <span class="pcl"><span class="kw">karya</span> <span class="fn">guni_tapasni</span><span class="op">(</span><span class="id">guni</span><span class="op">):</span></span>
+          <span class="pcl"><span class="py-in"></span><span class="kw">jar</span> <span class="id">guni</span> <span class="op">&gt;=</span> <span class="num">90</span><span class="op">:</span></span>
+          <span class="pcl"><span class="py-in"></span><span class="py-in"></span><span class="bi">dakhava</span><span class="op">(</span><span class="str">"A श्रेणी!"</span><span class="op">)</span></span>
+          <span class="pcl"><span class="py-in"></span><span class="kw">nahitar jar</span> <span class="id">guni</span> <span class="op">&gt;=</span> <span class="num">75</span><span class="op">:</span></span>
+          <span class="pcl"><span class="py-in"></span><span class="py-in"></span><span class="bi">dakhava</span><span class="op">(</span><span class="str">"B श्रेणी!"</span><span class="op">)</span></span>
+          <span class="pcl"><span class="py-in"></span><span class="kw">nahitar</span><span class="op">:</span></span>
+          <span class="pcl"><span class="py-in"></span><span class="py-in"></span><span class="bi">dakhava</span><span class="op">(</span><span class="str">"अभ्यास कर!"</span><span class="op">)</span></span>
+          <span class="pcl">&nbsp;</span>
+          <span class="pcl"><span class="id">m</span> <span class="op">=</span> <span class="bi">poornanank</span><span class="op">(</span><span class="bi">ghya</span><span class="op">(</span><span class="str">"गुण द्या: "</span><span class="op">))</span></span>
+          <span class="pcl"><span class="fn">guni_tapasni</span><span class="op">(</span><span class="id">m</span><span class="op">)</span></span>
+        </div>
+        <div class="panel-caption mc-cap">Same logic. Same power. A Marathi student reads this like <strong>their own language — because it is.</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURES ══ -->
+<section class="features-section" id="features">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:64px">
+      <div class="section-label" style="justify-content:center">वैशिष्ट्ये</div>
+      <h2 class="section-title">एक संपूर्ण <span class="accent">Ecosystem</span></h2>
+      <p class="section-sub" style="margin:0 auto">फक्त एक programming language नाही — एक पूर्ण IDE, interpreter आणि developer experience.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card reveal reveal-delay-1">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 17l6-6-6-6M12 19h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="feat-title">Custom Interpreter</div>
+        <div class="feat-desc">Python मध्ये लिहिलेला संपूर्ण Lexer → Parser → AST → Evaluator. Real code execution, not simulation.</div>
+      </div>
+      <div class="feat-card reveal reveal-delay-2">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div class="feat-title">VS Code-Style IDE</div>
+        <div class="feat-desc">Activity bar, tab system, resizable panels, syntax highlighting, line numbers — professional grade web IDE.</div>
+      </div>
+      <div class="feat-card reveal reveal-delay-3">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="feat-title">20+ Marathi Keywords</div>
+        <div class="feat-desc">if → jar, while → jaoparyant, def → karya, class → varg. प्रत्येक concept मराठीत.</div>
+      </div>
+      <div class="feat-card reveal reveal-delay-1">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 2v6h6M10 13h4M10 17h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div class="feat-title">Multi-File Support</div>
+        <div class="feat-desc">अनेक .mc files एकाच वेळी उघडा, edit करा, run करा. Tab-based file management.</div>
+      </div>
+      <div class="feat-card reveal reveal-delay-2">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 12h1M20 12h1M12 3v1M12 20v1M5.64 5.64l.7.7M17.66 17.66l.7.7M5.64 18.36l.7-.7M17.66 6.34l.7-.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div class="feat-title">4 Color Themes</div>
+        <div class="feat-desc">Dark, Light, Saffron (केशरी), Midnight. भारतीय saffron theme specially designed करून.</div>
+      </div>
+      <div class="feat-card reveal reveal-delay-3">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M8 9l3 3-3 3M13 15h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="4" width="20" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/></svg>
+        </div>
+        <div class="feat-title">ghya() — Real Input</div>
+        <div class="feat-desc">Python च्या input() सारखे terminal-style inline input. Programs user से interact करू शकतात.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="how-section" id="how">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:64px">
+      <div class="section-label" style="justify-content:center">कसे वापरावे</div>
+      <h2 class="section-title">सुरुवात करा <span class="accent">4 पायऱ्यांमध्ये</span></h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card reveal reveal-delay-1">
+        <div class="step-num">१</div>
+        <div class="step-title">IDE उघडा</div>
+        <div class="step-desc">marathicode.onrender.com वर जा. कोणतीही installation नाही — फक्त browser उघडा.</div>
+      </div>
+      <div class="step-card reveal reveal-delay-2">
+        <div class="step-num">२</div>
+        <div class="step-title">मराठीत लिहा</div>
+        <div class="step-desc">Editor मध्ये मराठी keywords वापरून code लिहा. Syntax highlighting आपोआप होते.</div>
+      </div>
+      <div class="step-card reveal reveal-delay-3">
+        <div class="step-num">३</div>
+        <div class="step-title">चालवा</div>
+        <div class="step-desc">"चालवा" बटण दाबा किंवा Ctrl+Enter. Output लगेच दिसतो.</div>
+      </div>
+      <div class="step-card reveal reveal-delay-4">
+        <div class="step-num">४</div>
+        <div class="step-title">शिका आणि Share करा</div>
+        <div class="step-desc">12+ examples explore करा. Friends ना link share करा. मराठी tech community वाढवा!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ QUOTE ══ -->
+<section class="quote-section">
+  <div class="quote-inner reveal">
+    <span class="quote-mark">"</span>
+    <p class="quote-text">
+      8 कोटी मराठी भाषक आहेत. तरीही प्रत्येक programming language त्यांना
+      <strong>English मध्ये विचार करायला</strong> भाग पाडते.
+      मराठीकोड हे बदलते.
+    </p>
+    <div class="quote-author">
+      <div class="quote-avatar">व</div>
+      <div class="quote-info">
+        <div class="quote-name">Vipul</div>
+        <div class="quote-role">मराठीकोड चे निर्माता · Creator of MarathiCode</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="cta-section">
+  <div class="section-inner">
+    <div class="cta-card reveal">
+      <h2 class="cta-title">
+        आत्ता सुरू करा<br>
+        <span class="fire">मराठीत Code करा</span>
+      </h2>
+      <p class="cta-sub">
+        No download. No install. No English required.<br>
+        Browser उघडा आणि तुमचा पहिला Marathi program लिहा.
+      </p>
+      <div class="cta-btns">
+        <a href="/ide"  class="btn-hero" style="font-size:16px;padding:16px 40px">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px"><path d="M6 4.75a.75.75 0 0 0-1.166.624v13.252a.75.75 0 0 0 1.166.624l10.5-6.626a.75.75 0 0 0 0-1.248L6 4.75Z"/></svg>
+          Live IDE उघडा
+        </a>
+        <a href="#keywords" class="btn-outline-hero" style="font-size:16px;padding:16px 32px">सर्व Keywords पहा</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="footer-logo">
+      <div class="footer-logo-m">म</div>
+      <span class="footer-logo-text">मराठीकोड</span>
+    </a>
+    <div class="footer-links">
+      <a href="/ide" >Live IDE</a>
+      <a href="#keywords">Keywords</a>
+      <a href="#features">Features</a>
+      <a href="#how">How to Use</a>
+    </div>
+    <div class="footer-copy">
+      🇮🇳 8 कोटी मराठी भाषकांसाठी बनवले · MIT License
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── CURSOR ── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+});
+
+function animRing() {
+  rx += (mx - rx) * .12;
+  ry += (my - ry) * .12;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+document.querySelectorAll('a,button,.kw-card,.feat-card,.step-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '20px';
+    cursor.style.height = '20px';
+    ring.style.width = '50px';
+    ring.style.height = '50px';
+    ring.style.borderColor = 'rgba(255,117,24,.6)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '12px';
+    cursor.style.height = '12px';
+    ring.style.width = '36px';
+    ring.style.height = '36px';
+    ring.style.borderColor = 'rgba(255,117,24,.4)';
+  });
+});
+
+/* ── SCROLL REVEAL ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ── SMOOTH NAV ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const id = a.getAttribute('href').slice(1);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+/* ── NAV SCROLL STYLE ── */
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 50) {
+    nav.style.background = 'rgba(7,8,15,.95)';
+  } else {
+    nav.style.background = 'rgba(7,8,15,.7)';
+  }
+});
+
+/* ── KEYWORD CARD TILT ── */
+document.querySelectorAll('.kw-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - .5;
+    const y = (e.clientY - rect.top)  / rect.height - .5;
+    card.style.transform = `translateY(-4px) rotateX(${-y*8}deg) rotateY(${x*8}deg)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+});
+</script>
+</body>
+</html>
